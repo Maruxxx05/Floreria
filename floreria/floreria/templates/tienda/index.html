@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Floralis - Productos</h1>
+<div>
+  {% for producto in productos %}
+    <div style="border:1px solid #ddd; padding:8px; margin:8px;">
+      <h3><a href="{% url 'tienda:producto_detalle' producto.pk %}">{{ producto.nombre }}</a></h3>
+      {% if producto.imagen %}
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="150">
+      {% endif %}
+      <p>{{ producto.descripcion|truncatechars:100 }}</p>
+      <p>Precio: ${{ producto.precio }}</p>
+      <a href="{% url 'tienda:agregar_al_carrito' producto.id %}">Agregar al carrito</a>
+    </div>
+  {% empty %}
+    <p>No hay productos.</p>
+  {% endfor %}
+</div>
+{% endblock %}
