@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Floralis - Tu Tienda de Flores</h1>
+                <p class="lead fw-normal text-white-50 mb-0">La belleza de la naturaleza a un click de distancia</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                
+                {% for p in productos %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        
+                        {% if p.en_promo %}
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Promo</div>
+                        {% endif %}
+                        
+                        <img class="card-img-top" src="{{ p.imagen.url }}" alt="{{ p.nombre }}" />
+                        
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">{{ p.nombre }}</h5>
+                                
+                                {% if p.rating %}
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= p.rating %}
+                                                <div class="bi-star-fill"></div>
+                                            {% else %}
+                                                <div class="bi-star"></div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if p.precio_anterior %}
+                                    <span class="text-muted text-decoration-line-through">${{ p.precio_anterior|floatformat:0 }}</span>
+                                {% endif %}
+                                ${{ p.precio|floatformat:0 }}
+                                <br>
+                                <h6 class="mt-2 text-muted">{{ p.descripcion_corta }}</h6> 
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'tienda:agregar_carrito' p.id %}">Añadir al carro</a></div>
+                        </div>
+                    </div>
+                    </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <h4>No hay productos disponibles en este momento.</h4>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
